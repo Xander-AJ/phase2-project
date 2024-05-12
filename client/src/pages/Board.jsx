@@ -2,7 +2,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
 import { Box, IconButton, TextField } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import boardApi from '../api/boardApi'
@@ -23,6 +23,7 @@ const Board = () => {
   const [sections, setSections] = useState([])
   const [isFavourite, setIsFavourite] = useState(false)
   const [icon, setIcon] = useState('')
+  const [boardResponse, setBoardResponse ] = useState([])
 
   const boards = useSelector((state) => state.board.value)
   const favouriteList = useSelector((state) => state.favourites.value)
@@ -31,6 +32,7 @@ const Board = () => {
     const getBoard = async () => {
       try {
         const res = await boardApi.getOne(boardId)
+        setBoardResponse(res)
         setTitle(res.title)
         setDescription(res.description)
         setSections(res.sections)
@@ -42,6 +44,8 @@ const Board = () => {
     }
     getBoard()
   }, [boardId])
+
+  console.log(boardResponse);
 
   const onIconChange = async (newIcon) => {
     let temp = [...boards]
